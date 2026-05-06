@@ -178,6 +178,13 @@
             <h2 class="script-title center">Programme</h2>
             <div class="red-divider"></div>
 
+            <div class="center" style="margin-bottom: 3rem;">
+                <button id="add-to-calendar-btn" class="btn-gold" style="display: inline-flex; align-items: center; gap: 8px; font-size: 1.1rem; padding: 0.8rem 1.5rem;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Ajouter à mon Calendrier
+                </button>
+            </div>
+
             <div class="modern-timeline">
                 
                 <div class="timeline-group slide-up">
@@ -581,6 +588,36 @@
                     navigator.clipboard.writeText(window.location.href);
                     showModal("Lien copié !", "Le lien du site a été copié dans votre presse-papiers. Vous pouvez maintenant le coller sur WhatsApp ou Facebook.");
                 }
+            });
+        }
+
+        // 5. Ajouter au Calendrier (.ics)
+        const calendarBtn = document.getElementById('add-to-calendar-btn');
+        if (calendarBtn) {
+            calendarBtn.addEventListener('click', () => {
+                const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:20260522T130000Z
+DTEND:20260523T140000Z
+SUMMARY:Obsèques Papa LONLA François
+DESCRIPTION:Programme officiel :\\nVendredi 22 Mai : Levée de corps à 14h, veillée à Bamessingué.\\nSamedi 23 Mai : Inhumation à 13h.\\n\\nLien : ${window.location.href}
+LOCATION:Bafemgha, Cameroun
+END:VEVENT
+END:VCALENDAR`;
+
+                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.setAttribute('download', 'Obseques_Papa_Francois.ics');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Petit délai pour laisser le téléchargement démarrer sur mobile
+                setTimeout(() => {
+                    showModal("Calendrier", "Le fichier de l'événement a été téléchargé. Cliquez dessus pour l'ajouter à votre agenda !");
+                }, 500);
             });
         }
 

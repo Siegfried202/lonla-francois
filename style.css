@@ -738,3 +738,37 @@ body {
         padding: 1rem;
     }
 }
+
+/* --- Bouton Partage Flottant --- */
+.floating-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--gold);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.floating-btn:hover {
+    transform: scale(1.1) rotate(5deg);
+    background-color: #c9a633; /* Darker gold */
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6), 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+    .floating-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+    }
+}

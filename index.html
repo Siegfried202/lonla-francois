@@ -36,6 +36,17 @@
 
 <body>
 
+    <!-- Bouton Partage Flottant -->
+    <button id="floating-share-btn" class="floating-btn" aria-label="Partager le site">
+        <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+    </button>
+
     <!-- Header / Hero Section -->
     <header id="accueil" class="hero">
         <div class="hero-container">
@@ -547,6 +558,28 @@
                 } finally {
                     btn.disabled = false;
                     btn.innerText = "Confirmer ma venue";
+                }
+            });
+        }
+
+        // 4. Logique du bouton de partage (Web Share API)
+        const shareBtn = document.getElementById('floating-share-btn');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', async () => {
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: 'En Mémoire de Papa LONLA François',
+                            text: 'Consultez le programme officiel des obsèques et laissez un témoignage.',
+                            url: window.location.href,
+                        });
+                    } catch (err) {
+                        console.log('Partage annulé ou échoué', err);
+                    }
+                } else {
+                    // Fallback (Copie du lien)
+                    navigator.clipboard.writeText(window.location.href);
+                    showModal("Lien copié !", "Le lien du site a été copié dans votre presse-papiers. Vous pouvez maintenant le coller sur WhatsApp ou Facebook.");
                 }
             });
         }

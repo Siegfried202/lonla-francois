@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-    const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/69fbce7fadc21f119a63ada3';
+    const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/69fbd46ec0954111d8e92554';
     const JSONBIN_KEY = process.env.JSONBIN_KEY;
 
     if (!JSONBIN_KEY) {

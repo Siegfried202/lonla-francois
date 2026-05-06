@@ -6,3 +6,5 @@ database.sqlite
 *.py
 setup_bin.js
 .gemini/
+.env
+.env

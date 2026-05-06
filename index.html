@@ -397,9 +397,8 @@
             observer.observe(el);
         });
 
-        // --- Logique Backend (JSONBin.io Serverless) ---
-        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/69fbce7fadc21f119a63ada3';
-        const JSONBIN_KEY = '$2a$10$P7.VeKKG9VjAiwR24.zlFupAXXVyFZD9ZAhivu1laWMFs.7n3kuni';
+        // --- Logique Backend (Vercel Serverless API) ---
+        const API_URL = '/api';
 
         // Initialisation de Swiper (Parallax Coverflow Carousel)
         let guestbookSwiper;
@@ -432,11 +431,9 @@
         async function loadGuestbook() {
             const wall = document.getElementById('messages-wall');
             try {
-                const response = await fetch(JSONBIN_URL, {
-                    headers: { 'X-Master-Key': JSONBIN_KEY }
-                });
+                const response = await fetch(`${API_URL}/guestbook`);
                 const data = await response.json();
-                // Vérifier si record existe, sinon tableau vide. On inverse pour les plus récents en premier.
+                
                 const guestbookData = (data.record && data.record.guestbook) ? data.record.guestbook.reverse() : [];
 
                 if (guestbookData && guestbookData.length > 0) {
@@ -487,30 +484,13 @@
             const message = document.getElementById('gb-message').value;
 
             try {
-                // Étape 1 : Récupérer les données actuelles
-                const getRes = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': JSONBIN_KEY } });
-                const currentData = await getRes.json();
-                const record = currentData.record || { guestbook: [], reservations: [] };
-
-                // Étape 2 : Ajouter le nouveau message
-                record.guestbook.push({
-                    id: Date.now(),
-                    nom: nom,
-                    message: message,
-                    date: new Date().toISOString()
+                const res = await fetch(`${API_URL}/guestbook`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nom, message })
                 });
 
-                // Étape 3 : Sauvegarder dans JSONBin
-                const putRes = await fetch(JSONBIN_URL, {
-                    method: 'PUT',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': JSONBIN_KEY 
-                    },
-                    body: JSON.stringify(record)
-                });
-
-                if (putRes.ok) {
+                if (res.ok) {
                     document.getElementById('gb-name').value = '';
                     document.getElementById('gb-message').value = '';
                     document.getElementById('gb-captcha').value = '';
@@ -548,22 +528,13 @@
                 };
 
                 try {
-                    const getRes = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': JSONBIN_KEY } });
-                    const currentData = await getRes.json();
-                    const record = currentData.record || { guestbook: [], reservations: [] };
-                    
-                    record.reservations.push(payload);
-
-                    const putRes = await fetch(JSONBIN_URL, {
-                        method: 'PUT',
-                        headers: { 
-                            'Content-Type': 'application/json',
-                            'X-Master-Key': JSONBIN_KEY 
-                        },
-                        body: JSON.stringify(record)
+                    const res = await fetch(`${API_URL}/reservations`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
                     });
 
-                    if (putRes.ok) {
+                    if (res.ok) {
                         feedback.style.color = "green";
                         feedback.innerText = "Réservation confirmée avec succès. La famille a été notifiée.";
                         e.target.reset();

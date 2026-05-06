@@ -1,0 +1,8 @@
+node_modules/
+archive_backend/
+pdf/
+audios/
+database.sqlite
+*.py
+setup_bin.js
+.gemini/
